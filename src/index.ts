@@ -18,10 +18,11 @@ app.use(express.json());
 app.use(cors());
 
 export const db = new Client({
-  connectionString: process.env.DATABASE_URL, // Use a string de conexão do ElephantSQL
-  ssl: {
-    rejectUnauthorized: false
-  }
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASS,
+  port: 5433,
 });
 
 db.connect();
