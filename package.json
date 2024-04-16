@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon --watch 'src/' --exec ts-node src/index.ts",
-    "start": "node index.js"
+    "buid":"rm -rf ./dist && tsc",
+    "start": "node index.js",
+    "migration:run":"typeorm-ts-node-commonjs -d ./src/data-source.ts migration:run"
 
   },
   "author": "charle xavier",
