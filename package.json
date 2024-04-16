@@ -4,11 +4,10 @@
   "description": "login_usuarios",
   "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon --watch 'src/' --exec ts-node src/index.ts",
-    "buid":"rm -rf ./dist && tsc",
-    "start": "node index.js",
-    "migration:run":"typeorm-ts-node-commonjs -d ./src/data-source.ts migration:run"
+    "test": "jest",
+    "build":"tsc",
+    "start": "node dist/index.js",
+    "dev":"ts-node-dev --exit-child --transpile-only --ignore-watch node_modules --respawn src/index.ts"
 
   },
   "author": "charle xavier",
