@@ -1,20 +1,25 @@
-import { Client } from "pg";
+import express from "express";
+import cors from "cors";
 import dotenv from "dotenv";
+import { Client } from "pg";
 import * as bcrypt from "bcrypt";
 import { UsersService } from "./services/usersServices";
 import { verifyToken } from "./conections/authorization";
-export const SECRET = process.env.SECRET
-import express from "express";
 
 dotenv.config();
 const app = express();
 const port = 3000;
 
 // Configuração do CORS
-import cors from 'cors';
-app.use(cors({
-  origin: 'http://127.0.0.1:5501' // Permitindo apenas esta origem
-}));
+app.use(
+  cors({
+    origin: "http://127.0.0.1:5501", // Permitindo apenas esta origem
+    allowedHeaders: ["Content-Type"], // Permitindo o cabeçalho Content-Type
+  })
+);
+
+app.use(express.json());
+export const SECRET = process.env.SECRET;
 
 app.use(express.json());
 
@@ -41,9 +46,13 @@ app.post("/login", async (req, res, next) => {
       const correctPassword = await bcrypt.compare(senha, foundUser.senha);
 
       if (correctPassword) {
-        const token = jwt.sign({ usuario: foundUser.usuario }, process.env.SECRET, {
-          expiresIn: 300, // expires in 5 minutes
-        });
+        const token = jwt.sign(
+          { usuario: foundUser.usuario },
+          process.env.SECRET,
+          {
+            expiresIn: 300, // expires in 5 minutes
+          }
+        );
         return res.json({ auth: true, token: token });
       }
     }
@@ -117,7 +126,10 @@ app.post("/check-email", async (req, res) => {
     const user = await usersService.getByEmail(email);
 
     if (user) {
-      res.json({ message: "Um link de recuperação foi enviado para o seu email.. Sucesso!" });
+      res.json({
+        message:
+          "Um link de recuperação foi enviado para o seu email.. Sucesso!",
+      });
     } else {
       res.status(200).json({ message: "Email não encontrado" });
     }

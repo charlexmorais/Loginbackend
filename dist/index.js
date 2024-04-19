@@ -36,21 +36,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.jwt = exports.db = exports.SECRET = void 0;
-const pg_1 = require("pg");
+const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const pg_1 = require("pg");
 const bcrypt = __importStar(require("bcrypt"));
 const usersServices_1 = require("./services/usersServices");
 const authorization_1 = require("./conections/authorization");
-exports.SECRET = process.env.SECRET;
-const express_1 = __importDefault(require("express"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = 3000;
 // Configuração do CORS
-const cors_1 = __importDefault(require("cors"));
 app.use((0, cors_1.default)({
-    origin: 'http://127.0.0.1:5501' // Permitindo apenas esta origem
+    origin: "http://127.0.0.1:5501", // Permitindo apenas esta origem
+    allowedHeaders: ["Content-Type"], // Permitindo o cabeçalho Content-Type
 }));
+app.use(express_1.default.json());
+exports.SECRET = process.env.SECRET;
 app.use(express_1.default.json());
 exports.db = new pg_1.Client({
     user: process.env.DB_USER,
@@ -139,7 +141,9 @@ app.post("/check-email", (req, res) => __awaiter(void 0, void 0, void 0, functio
         const { email } = req.body;
         const user = yield usersService.getByEmail(email);
         if (user) {
-            res.json({ message: "Um link de recuperação foi enviado para o seu email.. Sucesso!" });
+            res.json({
+                message: "Um link de recuperação foi enviado para o seu email.. Sucesso!",
+            });
         }
         else {
             res.status(200).json({ message: "Email não encontrado" });

@@ -8,9 +8,7 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "ts-node-dev --exit-child --transpile-only --ignore-watch node_modules --respawn src/index.ts"
-},
-
-
+  },
   "author": "charle xavier",
   "license": "ISC",
   "dependencies": {
@@ -28,6 +26,7 @@
     "typescript": "^5.2.2"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/pg": "^8.10.9",
     "nodemon": "^3.1.0"
