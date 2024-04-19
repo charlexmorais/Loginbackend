@@ -43,12 +43,12 @@ const usersServices_1 = require("./services/usersServices");
 const authorization_1 = require("./conections/authorization");
 const express_1 = __importDefault(require("express"));
 exports.SECRET = process.env.SECRET;
-const cors = require('cors');
+const cors_1 = __importDefault(require("cors")); // Importing cors as ES module
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = 3000;
 app.use(express_1.default.json());
-app.use(cors());
+app.use((0, cors_1.default)());
 exports.db = new pg_1.Client({
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
@@ -58,8 +58,8 @@ exports.db = new pg_1.Client({
 });
 exports.db.connect();
 const usersService = new usersServices_1.UsersService(exports.db);
-exports.jwt = require("jsonwebtoken");
-const bodyParser = require("body-parser");
+exports.jwt = require("jsonwebtoken"); // You may leave this line as is if using CommonJS require syntax
+const bodyParser = require("body-parser"); // You may leave this line as is if using CommonJS require syntax
 app.post("/login", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { usuario, senha } = req.body;

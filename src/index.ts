@@ -1,14 +1,12 @@
-
 import { Client } from "pg";
 import dotenv from "dotenv";
 import * as bcrypt from "bcrypt";
 import { UsersService } from "./services/usersServices";
-import { verifyToken} from "./conections/authorization"
+import { verifyToken } from "./conections/authorization";
 import express from "express";
 export const SECRET = process.env.SECRET;
 
-const cors = require('cors');
-
+import cors from "cors"; // Importing cors as ES module
 
 dotenv.config();
 const app = express();
@@ -29,11 +27,9 @@ db.connect();
 
 const usersService = new UsersService(db);
 
-export const jwt = require("jsonwebtoken");
+export const jwt = require("jsonwebtoken"); // You may leave this line as is if using CommonJS require syntax
 
-const bodyParser = require("body-parser");
-
-
+const bodyParser = require("body-parser"); // You may leave this line as is if using CommonJS require syntax
 
 app.post("/login", async (req, res, next) => {
   try {
@@ -56,7 +52,7 @@ app.post("/login", async (req, res, next) => {
     res.status(500).json({ error: "Erro ao tentar fazer login." });
   }
 });
-app.get("/usuarios",verifyToken,async (req, res) => {
+app.get("/usuarios", verifyToken, async (req, res) => {
   try {
     const usuarios = await usersService.getAll();
     res.json(usuarios);
@@ -65,7 +61,7 @@ app.get("/usuarios",verifyToken,async (req, res) => {
   }
 });
 
-app.get("/usuarios/:id",verifyToken,async (req, res) => {
+app.get("/usuarios/:id", verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
     const user = await usersService.find(id);
@@ -83,18 +79,16 @@ app.post("/usuarios", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-app.put("/usuarios/:id",verifyToken,async (req, res) => {
+app.put("/usuarios/:id", verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
     const userDataToUpdate = req.body;
 
-   
     const existingUser = await usersService.find(id);
 
     if (!existingUser) {
       return res.status(404).json({ message: "Usuário não encontrado" });
     }
-
 
     const updatedUser = await usersService.update(id, userDataToUpdate);
 
@@ -104,9 +98,7 @@ app.put("/usuarios/:id",verifyToken,async (req, res) => {
   }
 });
 
-
-app.delete("/usuarios/:id",verifyToken, async (req, res) => {
-
+app.delete("/usuarios/:id", verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
     await usersService.delete(id);
@@ -132,8 +124,6 @@ app.post("/check-email", async (req, res) => {
   }
 });
 
-
 app.listen(port, () => {
   console.log("server run", port);
-  
 });
